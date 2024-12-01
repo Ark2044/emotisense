@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>EmotiSense: Results</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎭</text></svg>"
+    />
+    <style>
+      body {
+        background-color: #000;
+        color: #39ff14;
+      }
+
+      .neon-text {
+        color: #39ff14;
+        text-shadow: 0 0 5px #39ff14;
+      }
+
+      .neon-border {
+        border-color: #39ff14;
+        box-shadow: 0 0 5px #39ff14;
+      }
+
+      .neon-button {
+        background: #000;
+        color: #39ff14;
+        border: 2px solid #39ff14;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .neon-button:hover {
+        transform: scale(0.95);
+        box-shadow: 0 0 10px #39ff14;
+      }
+
+      #chatbox {
+        scrollbar-width: thin;
+        scrollbar-color: #39ff14 #000;
+      }
+
+      #chatbox::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #chatbox::-webkit-scrollbar-track {
+        background: #000;
+      }
+
+      #chatbox::-webkit-scrollbar-thumb {
+        background-color: #39ff14;
+        border-radius: 20px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col overflow-x-hidden">
+    <header class="bg-black text-white py-4 sm:py-6 shadow-lg">
+      <div
+        class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center"
+      >
+        <a
+          href="/"
+          class="text-2xl sm:text-3xl font-bold hover:text-gray-300 transition-all ease-in-out duration-300 transform hover:scale-110 neon-text"
+          >EmotiSense</a
+        >
+        <h1
+          class="text-2xl sm:text-4xl font-extrabold text-center neon-text mt-4 sm:mt-0"
+        >
+          🎭 Discover Your True Mood!
+        </h1>
+      </div>
+    </header>
+
+    <main
+      class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 flex-grow"
+    >
+      <section
+        class="rounded-3xl shadow-3xl p-4 sm:p-6 flex flex-col items-center bg-black neon-border"
+      >
+        <h2 class="text-2xl sm:text-3xl font-extrabold neon-text mb-4 sm:mb-6">
+          ✨ Unleash the Power of Memes! ✨
+        </h2>
+        <p class="text-gray-200 text-center mb-4 sm:mb-6 neon-text">
+          Let your
+          <span class="font-bold emotion-text">{{ emotion }}</span> shine
+          through with the perfect meme. Get ready to spread joy and laughter!
+        </p>
+        <div
+          class="w-full max-w-xs sm:max-w-sm aspect-w-16 aspect-h-9 mb-4 sm:mb-6"
+        >
+          <img
+            id="meme-image"
+            src="https://via.placeholder.com/400"
+            alt="Emotion-Matched Meme"
+            class="rounded-lg shadow-xl object-cover w-full h-full neon-border"
+          />
+        </div>
+        <div
+          class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+        >
+          <button
+            onclick="downloadMeme()"
+            class="py-3 px-6 neon-button rounded-lg font-bold text-lg sm:text-xl"
+          >
+            Download Your Meme
+          </button>
+          <button
+            onclick="shareMeme()"
+            class="py-3 px-6 neon-button rounded-lg font-bold text-lg sm:text-xl"
+          >
+            Share the Laughter
+          </button>
+        </div>
+      </section>
+
+      <section
+        class="rounded-3xl shadow-3xl p-4 sm:p-6 flex flex-col bg-black neon-border"
+      >
+        <h2
+          class="text-3xl sm:text-4xl font-extrabold neon-text mb-4 sm:mb-6 text-center"
+        >
+          🗣️ Chat with Your Emotions! 🗣️
+        </h2>
+        <div
+          id="chatbox"
+          class="border-4 border-dashed rounded-lg p-4 h-64 overflow-y-scroll bg-black mb-4 sm:mb-6 space-y-4 neon-border"
+        ></div>
+
+        <div
+          class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2"
+        >
+          <input
+            id="text-input"
+            type="text"
+            placeholder="Express yourself..."
+            class="flex-1 bg-black border-2 neon-border rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-500 transition-all ease-in-out"
+          />
+          <button
+            onclick="sendTextMessage()"
+            class="py-3 px-4 neon-button rounded-lg font-semibold text-lg sm:text-xl"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div
+          class="mt-4 sm:mt-6 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4"
+        >
+          <button
+            onclick="startVoiceQuery()"
+            class="py-3 px-5 neon-button rounded-lg font-semibold text-lg sm:text-xl flex items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1zm-1 4a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1zm5-1a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1zm-4 4a1 1 0 00-1 1v3a1 1 0 002 0v-3a1 1 0 00-1-1"
+                clip-rule="evenodd"
+              />
+            </svg>
+            Start Voice Query
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-black text-white py-4 text-center">
+      <p class="text-sm neon-text">
+        © 2024 EmotiSense.
+        <a href="/privacy" class="hover:text-gray-300 ml-2">Privacy Policy</a>
+      </p>
+    </footer>
+
+    <script>
+      // Meme Templates
+      const memeTemplates = {
+        happy:
+          "https://api.memegen.link/images/drake/When_I'm_feeling_happy/Meme_time!.jpg",
+        sad: "https://api.memegen.link/images/sad-keanu/When_the_emotion_hits/Right_in_the_feels.jpg",
+        excited:
+          "https://api.memegen.link/images/buzz/Memes/Memes_everywhere.jpg",
+        angry:
+          "https://api.memegen.link/images/rage/When_something_makes_me_angry/Meme_reaction.jpg",
+        surprised:
+          "https://api.memegen.link/images/shocked/When_you_least_expect/A_meme.jpg",
+        neutral: "https://api.memegen.link/images/simply/Just_another/Mood.jpg",
+        default:
+          "https://api.memegen.link/images/buzz/Memes/Memes_everywhere.jpg",
+      };
+
+      // Meme Generation Function
+      function generateMeme(emotion) {
+        // Normalize emotion to lowercase and handle potential undefined
+        const normalizedEmotion = (emotion || "default").toLowerCase();
+
+        // Select meme template, fallback to default
+        const memeUrl =
+          memeTemplates[normalizedEmotion] || memeTemplates["default"];
+
+        // Update the meme image
+        const memeImage = document.getElementById("meme-image");
+        memeImage.src = memeUrl;
+        memeImage.alt = `${emotion} Emotion Meme`;
+
+        // Update emotion text
+        const emotionTextElements = document.querySelectorAll(".emotion-text");
+        emotionTextElements.forEach((el) => {
+          el.textContent = emotion;
+        });
+      }
+
+      // Download Meme Function
+      function downloadMeme() {
+        const memeImage = document.getElementById("meme-image");
+        const emotion = document.querySelector(".emotion-text").textContent;
+
+        fetch(memeImage.src)
+          .then((response) => response.blob())
+          .then((blob) => {
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `emotisense_${emotion}_meme.jpg`;
+            link.click();
+          })
+          .catch((error) => {
+            console.error("Download failed:", error);
+            alert("Failed to download meme. Please try again.");
+          });
+      }
+
+      // Share Meme Function
+      function shareMeme() {
+        const memeImage = document.getElementById("meme-image");
+        const emotion = document.querySelector(".emotion-text").textContent;
+
+        if (navigator.share) {
+          navigator
+            .share({
+              title: "EmotiSense Meme",
+              text: `Check out my ${emotion} mood meme from EmotiSense!`,
+              url: memeImage.src,
+            })
+            .catch(console.error);
+        } else {
+          // Fallback for browsers that don't support Web Share API
+          navigator.clipboard.writeText(memeImage.src).then(() => {
+            alert("Meme URL copied to clipboard!");
+          });
+        }
+      }
+
+      function sendTextMessage() {
+        const userMessage = document.getElementById("text-input").value;
+        if (!userMessage.trim()) return;
+
+        const chatbox = document.getElementById("chatbox");
+        const userMessageEl = document.createElement("div");
+        userMessageEl.classList.add(
+          "text-right",
+          "text-blue-300",
+          "p-3",
+          "rounded-lg",
+          "bg-gray-900",
+          "max-w-[80%]",
+          "ml-auto",
+          "mb-2"
+        );
+        userMessageEl.textContent = userMessage;
+        chatbox.appendChild(userMessageEl);
+
+        fetch("/text_query", {
+          method: "POST",
+          body: new URLSearchParams({ query: userMessage }),
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const aiMessageEl = document.createElement("div");
+            aiMessageEl.classList.add(
+              "text-left",
+              "text-green-300",
+              "p-3",
+              "rounded-lg",
+              "bg-gray-900",
+              "max-w-[80%]",
+              "mr-auto",
+              "mb-2"
+            );
+            aiMessageEl.textContent = data.response;
+            chatbox.appendChild(aiMessageEl);
+            chatbox.scrollTop = chatbox.scrollHeight;
+          })
+          .catch(() => {
+            const errorMessageEl = document.createElement("div");
+            errorMessageEl.classList.add(
+              "text-left",
+              "text-red-300",
+              "p-3",
+              "rounded-lg",
+              "bg-gray-900",
+              "max-w-[80%]",
+              "mr-auto"
+            );
+            errorMessageEl.textContent = "Error processing request";
+            chatbox.appendChild(errorMessageEl);
+          });
+
+        document.getElementById("text-input").value = "";
+      }
+
+      function startVoiceQuery() {
+        const voiceStatus = document.getElementById("voice-status");
+        voiceStatus.textContent = "Listening... Speak now.";
+
+        fetch("/voice_query", { method: "POST" })
+          .then((response) => response.json())
+          .then((data) => {
+            const chatbox = document.getElementById("chatbox");
+            const aiMessageEl = document.createElement("div");
+            aiMessageEl.classList.add(
+              "text-left",
+              "text-green-300",
+              "p-3",
+              "rounded-lg",
+              "bg-gray-900",
+              "max-w-[80%]",
+              "mr-auto"
+            );
+            aiMessageEl.textContent = data.response;
+            chatbox.appendChild(aiMessageEl);
+            chatbox.scrollTop = chatbox.scrollHeight;
+          })
+          .catch(() => {
+            voiceStatus.textContent = "Error in speech processing.";
+          });
+      }
+      // Initialize meme on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        // This could be set to a default emotion or fetched from the backend
+        const initialEmotion = "{{emotion}}"; // Replace with actual emotion from backend
+        generateMeme(initialEmotion);
+      });
+    </script>
+  </body>
+</html>

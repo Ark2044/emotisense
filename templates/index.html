@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>EmotiSense: Emotion Detonator</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🤖</text></svg>"
+    />
+    <style>
+      /* Updated CSS animations and transformations with dark and neon theme */
+      body {
+        animation: hueRotate 10s infinite linear;
+        background-color: #000; /* Dark background */
+        will-change: filter; /* Optimization for hue-rotate animation */
+      }
+
+      @keyframes hueRotate {
+        from {
+          filter: hue-rotate(0deg);
+        }
+        to {
+          filter: hue-rotate(360deg);
+        }
+      }
+
+      .twist {
+        animation: twist 5s infinite alternate;
+        will-change: transform; /* Optimization for transform animation */
+      }
+
+      @keyframes twist {
+        from {
+          transform: rotate(-5deg) scale(0.98); /* Reduced rotation for smoother effect */
+        }
+        to {
+          transform: rotate(5deg) scale(1.02);
+        }
+      }
+
+      .wavy-text {
+        display: inline-block;
+        animation: wave 1s infinite;
+        will-change: transform; /* Optimization for skew animation */
+      }
+
+      @keyframes wave {
+        0% {
+          transform: skewX(0deg);
+        }
+        50% {
+          transform: skewX(10deg); /* Reduced skew for smoother effect */
+        }
+        100% {
+          transform: skewX(0deg);
+        }
+      }
+
+      .psychedelic {
+        animation: psychedelicBg 10s infinite alternate; /* Reduced duration for better performance */
+        background-size: 200% 200%;
+        will-change: background-position; /* Optimization for background animation */
+      }
+
+      @keyframes psychedelicBg {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Neon color styles */
+      .neon-text {
+        color: #39ff14;
+        text-shadow: 0 0 5px #39ff14, 0 0 10px #39ff14, 0 0 15px #39ff14; /* Reduced text shadow for smoother performance */
+      }
+
+      .neon-border {
+        border-color: #39ff14;
+        box-shadow: 0 0 5px #39ff14, 0 0 10px #39ff14;
+      }
+
+      .neon-button {
+        background: #000;
+        color: #39ff14;
+        border: 2px solid #39ff14;
+        box-shadow: 0 0 5px #39ff14, 0 0 20px #39ff14, 0 0 40px #39ff14;
+      }
+
+      .neon-button:hover {
+        box-shadow: 0 0 10px #39ff14, 0 0 30px #39ff14, 0 0 60px #39ff14;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex items-center justify-center p-4 transition-all duration-500 twist"
+  >
+    <div
+      class="rounded-3xl shadow-3xl w-full max-w-xl p-4 sm:p-6 md:p-8 lg:p-10 transform hover:scale-105 sm:hover:scale-110 duration-500 psychedelic neon-border"
+      style="background: linear-gradient(45deg, #000, #111, #000)"
+    >
+      <div class="text-center mb-4 sm:mb-6">
+        <h1
+          class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 sm:mb-4 wavy-text neon-text"
+        >
+          EmotiSense X-Treme
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl neon-text">
+          Unlock the Matrix of Your Mood
+        </p>
+      </div>
+      <p
+        class="text-center mb-4 sm:mb-6 md:mb-8 leading-relaxed px-2 sm:px-4 neon-text"
+      >
+        Drop your selfie into the void, let the AI twist and shout, and witness
+        emotions unravel in pure chaos.
+      </p>
+      <form
+        id="emotion-form"
+        action="/predict"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-4 sm:space-y-6"
+        onsubmit="showLoading()"
+      >
+        <div
+          class="border-4 border-dashed rounded-lg p-4 sm:p-6 text-center transition transform hover:scale-110 neon-border"
+        >
+          <input
+            type="file"
+            id="image-upload"
+            name="image"
+            accept="image/*"
+            class="hidden"
+            required
+          />
+          <label
+            for="image-upload"
+            class="cursor-pointer flex flex-col items-center space-y-4 sm:space-y-6"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 sm:h-14 sm:w-14 animate-spin-slow neon-text"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            <span class="font-semibold text-base sm:text-lg neon-text">
+              Smash to Upload & Disrupt the Cosmos
+            </span>
+            <p id="file-chosen" class="text-sm neon-text">
+              No file selected yet...😈
+            </p>
+          </label>
+        </div>
+        <div class="relative">
+          <button
+            type="submit"
+            class="w-full py-2 sm:py-3 text-lg sm:text-xl md:text-2xl font-bold rounded-lg transform hover:scale-95 transition-all neon-button"
+          >
+            Detonate My Mood
+          </button>
+          <div
+            id="loading-spinner"
+            class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-80 rounded-lg hidden"
+          >
+            <div
+              class="w-12 h-12 sm:w-16 sm:h-16 border-4 border-t-4 neon-border border-solid rounded-full animate-spin"
+            ></div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("image-upload")
+        .addEventListener("change", function (event) {
+          const fileChosen = document.getElementById("file-chosen");
+          fileChosen.textContent = event.target.files[0]
+            ? event.target.files[0].name
+            : "No file selected yet...😈";
+        });
+
+      function showLoading() {
+        const spinner = document.getElementById("loading-spinner");
+        spinner.classList.remove("hidden");
+      }
+    </script>
+  </body>
+</html>
